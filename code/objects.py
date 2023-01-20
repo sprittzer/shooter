@@ -379,8 +379,3 @@ class Revolver(Gun):
 def new_gun():
     all_guns = [Pistol, DualPistols, MachineGun, Revolver]
     return choice(all_guns)
-
-
-
-
-

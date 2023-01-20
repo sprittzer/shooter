@@ -20,9 +20,9 @@ class MainWindow:
         self.main_screen.blit(self.cursor, self.cursor_pos)
         draw_text(self.main_screen, 'главное меню', 90, WIDTH // 2, 60)
         draw_text(self.main_screen, 'играть', 80, WIDTH // 2, 300)
-        draw_text(self.main_screen, 'настройки', 80, WIDTH // 2, 430)
+        draw_text(self.main_screen, 'информация', 80, WIDTH // 2, 430)
         draw_text(self.main_screen, 'выйти', 80, WIDTH // 2, 560)
-        draw_text(self.main_screen, 'f/пробел/стрелки для использования меню', 30, WIDTH / 2 + 180, HEIGHT - 30)
+        draw_text(self.main_screen, 'f/стрелки для использования меню', 30, WIDTH - 280, HEIGHT - 30)
 
     def update_cursor(self, type):
         if type: # если 1 - клавиша вверх
@@ -30,19 +30,19 @@ class MainWindow:
                 self.status = 'quit'
                 self.cursor_pos = (0, 505)
             elif self.status == 'quit':
-                self.status = 'settings'
+                self.status = 'info'
                 self.cursor_pos = (0, 375)
-            elif self.status == 'settings':
+            elif self.status == 'info':
                 self.status = 'play'
                 self.cursor_pos = (0, 245)
         else:
             if self.status == 'play':
-                self.status = 'settings'
+                self.status = 'info'
                 self.cursor_pos = (0, 375)
             elif self.status == 'quit':
                 self.status = 'play'
                 self.cursor_pos = (0, 245)
-            elif self.status == 'settings':
+            elif self.status == 'info':
                 self.status = 'quit'
                 self.cursor_pos = (0, 505)
     
@@ -105,17 +105,12 @@ class ResultWindow:
     def __init__(self, main_screen, result):
         self.result = result
         self.main_screen = main_screen
-        self.cursor = pygame.Surface((WIDTH, 130))
-        self.cursor.fill('black')
-        self.cursor.set_alpha(99)
-        self.cursor_pos = (0, 275)
         self.background = pygame.transform.scale(pygame.image.load('working_sprites/menu_background.png'), (WIDTH, HEIGHT))
 
     def draw(self):
         with open('stats.txt', 'r') as file:
             record = file.readline()
         self.main_screen.blit(self.background, (0, 0))
-        self.main_screen.blit(self.cursor, self.cursor_pos)
         draw_text(self.main_screen, 'game over', 110, WIDTH // 2, 60)
         draw_text(self.main_screen, 'ваш результат', 100, WIDTH // 2, 350)
         draw_text(self.main_screen, str(self.result), 100, WIDTH // 2, 450)
@@ -124,6 +119,44 @@ class ResultWindow:
 
     def update(self):
         self.draw()
+
+
+class InfoWindow:
+    def __init__(self, main_screen):
+        self.main_screen = main_screen
+        self.status = 'description'
+        self.background = pygame.transform.scale(pygame.image.load('working_sprites/menu_background.png'), (WIDTH, HEIGHT))
+
+    def draw(self):
+        self.main_screen.blit(self.background, (0, 0))
+        if self.status == 'description':
+            draw_text(self.main_screen, 'описание', 110, WIDTH // 2, 60)
+            draw_text(self.main_screen, 'цель игры - выжить и собрать как можно больше ящиков с оружием.', 25, WIDTH // 2, 200)
+            draw_text(self.main_screen, 'игру усложняют враги, убивающие с одного касания.', 25, WIDTH // 2, 230)
+            draw_text(self.main_screen, 'если они попадают в огонь, то возраждаются уже более быстрыми.', 25, WIDTH // 2, 260)
+        else:
+            draw_text(self.main_screen, 'управление', 110, WIDTH // 2, 60)
+            draw_text(self.main_screen, 'в меню:', 30, WIDTH // 2, 200)
+            draw_text(self.main_screen, 'клавиша F - выбор позиции', 30, WIDTH // 2, 240)
+            draw_text(self.main_screen, 'стрелки - перемещение между позициями', 30, WIDTH // 2, 270)
+            draw_text(self.main_screen, 'в игре:', 30, WIDTH // 2, 350)
+            draw_text(self.main_screen, 'стрелки вправо/влево - передвижение игрока по карте', 30, WIDTH // 2, 390)
+            draw_text(self.main_screen, 'пробел - прыжок', 30, WIDTH // 2, 420)
+            draw_text(self.main_screen, 'клавиша F - стрельба', 30, WIDTH // 2, 450)
+            draw_text(self.main_screen, 'клавиша Esc - возращение в предыдущее окно/выход из игры', 30, WIDTH // 2, 500)
+        draw_text(self.main_screen, '<', 100, 50, HEIGHT // 2)
+        draw_text(self.main_screen, '>', 100, WIDTH - 50, HEIGHT // 2)
+
+
+    def update_win(self):
+        if self.status == 'description':
+            self.status = 'management'
+        else:
+            self.status = 'description'
+
+    def update(self):
+        self.draw()
+
 
 
 class Level:
@@ -216,7 +249,10 @@ class Level:
         box = self.box.sprite.rect
         if player.colliderect(box):
             self.box.sprite.update_pos()
-            self.gun.add(new_gun()(self.player.sprite))
+            gun = new_gun()(self.player.sprite)
+            while gun.__class__.__name__ == self.gun.sprite.__class__.__name__:
+                gun = new_gun()(self.player.sprite)
+            self.gun.add(gun)
             self.box_count += 1
             sound = mixer.Sound('sounds/sound_pickup.wav')
             self.create_boom_particles(player.center)
