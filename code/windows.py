@@ -148,7 +148,7 @@ class Level:
                     x, y = col_i * TILE_SIZE, row_i * TILE_SIZE
                     sprite = Tile(x, y, self.tile_list[int(value)])
                     self.tiles.add(sprite)
-        player_sprite = Player(100, 100, 16, 16, self.display_surface, self.create_jump_particles)
+        player_sprite = Player(100, 100, self.display_surface, self.create_jump_particles)
         self.player.add(player_sprite)
         self.box.add(Box())
         self.gun.add(Pistol(self.player.sprite))

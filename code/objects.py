@@ -6,7 +6,7 @@ from pygame import mixer
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y, width, height, surface, create_jump_particals):
+    def __init__(self, x, y, surface, create_jump_particals):
         super().__init__()
         self.display_surface = surface
         self.direction = pygame.math.Vector2(0, 0) # направление, изменение положения
