@@ -299,30 +299,6 @@ class Pistol(Gun):
         return [bullet]
 
 
-class Shotgun(Gun):
-    def __init__(self, player):
-        super().__init__('shotgun', player, -1, 2)
-        self.player = player
-        self.power = 1
-        self.speed_x = 5
-        self.speed_y = 0
-        self.long_press = False
-
-
-class Bazooka(Gun):
-    def __init__(self, player):
-        super().__init__('bazooka', player, -2, 1)
-        self.player = player
-        self.power = 1
-        self.speed_x = 5
-        self.speed_y = 0
-        self.long_press = True
-        self.period = 1000
-
-    def new_bullet(self):
-        pass
-
-
 class DualPistols(Gun):
     def __init__(self, player):
         super().__init__('dual pistols', player, -5, 1)
@@ -342,8 +318,8 @@ class MachineGun(Gun):
     def __init__(self, player):
         super().__init__('machine gun', player, -2, 1)
         self.player = player
-        self.power = 5
-        self.speed_x = 6
+        self.power = 9
+        self.speed_x = 10
         self.speed_y = 0
         self.long_press = True
         self.period = 170
@@ -364,7 +340,7 @@ class Revolver(Gun):
         super().__init__('revolver', player, -2, 1)
         self.player = player
         self.power = 30
-        self.speed_x = 6
+        self.speed_x = 5
         self.speed_y = 0
         self.long_press = False
 

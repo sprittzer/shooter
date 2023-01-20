@@ -19,6 +19,7 @@ press_sound.set_volume(VOLUME_SOUNDS)
 choice_sound.set_volume(VOLUME_SOUNDS)
 
 
+# функция для отображения главного окна
 def main_menu():
     menu = MainWindow(screen)
     while True:
@@ -54,6 +55,7 @@ def main_menu():
         clock.tick(FPS)
 
 
+# функция для отображения окна с описанием
 def info():
     menu = InfoWindow(screen)
     while True:
@@ -78,33 +80,8 @@ def info():
         pygame.display.update()
         clock.tick(FPS)
 
-def settings():
-    menu = Settings(screen)
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    esc_sound.play()
-                    main_menu()
-                elif event.key == pygame.K_f:
-                    press_sound.play()
-                    menu.get_input()
-                elif event.key == pygame.K_UP:
-                    choice_sound.play()
-                    menu.update_cursor()
-                elif event.key == pygame.K_DOWN:
-                    choice_sound.play()
-                    menu.update_cursor()
-        screen.fill('black')
-        menu.update()
 
-        pygame.display.update()
-        clock.tick(FPS)
-
-
+# функция для отображения окна с результатом игры
 def result_window(result):
     sound = mixer.Sound('sounds/game over.wav')
     sound.set_volume(VOLUME_SOUNDS)
@@ -128,6 +105,7 @@ def result_window(result):
         clock.tick(FPS)
     
 
+# функция для отображения самой игры
 def level():
     level = Level(1, screen)
     mixer.music.load('sounds/menu_music.mp3') 
@@ -158,7 +136,6 @@ def level():
                 if record == '' or (int(record) < result):
                     with open('stats.txt', 'w') as file1:
                         file1.write(str(result))
-                running = False
                 mixer.music.stop()
             result_window(result)
 

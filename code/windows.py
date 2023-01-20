@@ -50,57 +50,6 @@ class MainWindow:
         self.draw()
 
 
-class Settings:
-    def __init__(self, main_window):
-        self.main_screen = main_window
-        if VOLUME_MUSIC:
-            self.music_status = 'вкл'
-        else:
-            self.music_status = 'выкл'
-        if VOLUME_SOUNDS:
-            self.sounds_status = 'вкл'
-        else:
-            self.sounds_status = 'выкл'
-        self.cursor = pygame.Surface((WIDTH, 130))
-        self.cursor.fill('black')
-        self.cursor.set_alpha(99)
-        self.cursor_pos = (0, 275)
-        self.background = pygame.transform.scale(pygame.image.load('working_sprites/menu_background.png'), (WIDTH, HEIGHT))
-
-    def draw(self):
-        self.main_screen.blit(self.background, (0, 0))
-        self.main_screen.blit(self.cursor, self.cursor_pos)
-        draw_text(self.main_screen, 'настройки', 110, WIDTH // 2, 60)
-        draw_text(self.main_screen, f'музыка: {self.music_status}', 100, WIDTH // 2, 330)
-        draw_text(self.main_screen, f'звуки: {self.sounds_status}', 100, WIDTH // 2, 460)
-
-    def update_cursor(self):
-        if self.cursor_pos[1] < 300:
-            self.cursor_pos = (0, 405)
-        else:
-            self.cursor_pos = (0, 275)
-
-    def get_input(self):
-        global VOLUME_SOUNDS, VOLUME_MUSIC
-        if self.cursor_pos == (0, 275):
-            if self.music_status == 'выкл':
-                self.music_status = 'вкл'
-                VOLUME_MUSIC += 0.8
-            else:
-                self.music_status = 'выкл'
-                VOLUME_MUSIC -= 0.8
-        else:
-            if self.sounds_status == 'выкл':
-                self.sounds_status = 'вкл'
-                VOLUME_SOUNDS += 0.5
-            else:
-                self.sounds_status = 'выкл'
-                VOLUME_SOUNDS -= 0.5
-
-    def update(self):
-        self.draw()
-
-
 class ResultWindow:
     def __init__(self, main_screen, result):
         self.result = result
@@ -116,6 +65,8 @@ class ResultWindow:
         draw_text(self.main_screen, str(self.result), 100, WIDTH // 2, 450)
         draw_text(self.main_screen, 'ваш рекорд', 100, WIDTH // 2, 550)
         draw_text(self.main_screen, record, 100, WIDTH // 2, 650)
+        draw_text(self.main_screen, 'нажмите ПРОБЕЛ, чтобы начать заново', 35, WIDTH / 2, HEIGHT - 60)
+        draw_text(self.main_screen, 'нажмите ESC, чтобы выйти в главное меню', 35, WIDTH / 2, HEIGHT - 30)
 
     def update(self):
         self.draw()
@@ -147,7 +98,6 @@ class InfoWindow:
         draw_text(self.main_screen, '<', 100, 50, HEIGHT // 2)
         draw_text(self.main_screen, '>', 100, WIDTH - 50, HEIGHT // 2)
 
-
     def update_win(self):
         if self.status == 'description':
             self.status = 'management'
@@ -156,7 +106,6 @@ class InfoWindow:
 
     def update(self):
         self.draw()
-
 
 
 class Level:
